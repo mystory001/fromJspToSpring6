@@ -4,4 +4,40 @@
 	xmlns:security="http://www.springframework.org/schema/security"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+<!-- 
+인증(authentication) : 자기 스스로가 무언가 자신을 증명할 만한 자료를 제시하는 것
+
+권한부여(authorization, 인가) : 남에 의해 자격이 부여되는 것
+-->
+
+
+<!-- 웹 주소 연결 -->
+<security:http>
+	<!-- 특정한 URL에 접근 시 인터셉터를 이용해서 접근을 제한 -->
+	<security:intercept-url pattern="/sample/all" access="perminAll"/>
+	<security:intercept-url pattern="/sample/member" access="hasRole('ROLE_MEMBER')"/>
+	<security:intercept-url pattern="/sample/admin" access="hasRole('ROLE_ADMIN')"/>
+	
+	<!-- 로그인 페이지 -->
+	<security:form-login/>
+	
+	<!-- HTTP 상태 403 금지됨 → 페이지 연결 -->
+	<security:access-denied-handler error-page="/sample/accessError"/>
+	
+</security:http>
+
+
+<!-- 인증 관련 -->
+<security:authentication-manager> <!-- authentication-manager : 다양한 방식의 인증을 처리할 수 있도록 되어 있음. -->
+	<security:authentication-provider> <!-- authentication-provider : 실제 인증 작업을 진행함. -->
+<!-- UserdetailService : 인증된 정보 권한에 대한 정보를 같이 전달, 사용자의 정보와 사용자가 가진 권한의 정보를 처리해서 반환 -->
+		<security:user-service>
+			<security:user name="member" password="{noop}1234" authorities="ROLE_MEMBER"/>
+			<security:user name="admin" password="{noop}1234" authorities="ROLE_ADMIN"/>
+		</security:user-service>
+	</security:authentication-provider>
+</security:authentication-manager>
+
+
 </beans>

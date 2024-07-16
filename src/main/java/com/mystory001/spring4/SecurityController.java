@@ -4,6 +4,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -33,4 +34,29 @@ public class SecurityController {
 		model.addAttribute("msg","Access Denied");
 	}
 	
+	//security/customLogin
+	@GetMapping("/customLogin")
+	public void doCustomLogin(String error, String logout, Model model) {
+		System.out.println("doCustomLogin()");
+		
+		System.out.println("error : " + error);
+		System.out.println("logout : " + logout);
+		
+		if(error != null) {
+			model.addAttribute("error", "Login Error");
+		}
+		if(logout != null) {
+			model.addAttribute("logout","Logout");
+		}
+	}
+	
+	@GetMapping("/customLogout")
+	public void customLogoutGet() {
+		System.out.println("customLogoutGet()");
+	}
+	
+	@PostMapping("/customLogout")
+	public void customLogoutPost() {
+		System.out.println("customLogoutPost()");
+	}
 }
